@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app: 
+    build: .
+    environment:
+      - PROJECT_NAME=nest-project
+      - POSTGRES_DB=node_db
+      - POSTGRES_USER=hds
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_HOST=db
+    volumes:
+      - .:/usr/nest-project
+      - /usr/nest-project/node_modules
+    ports:
+      - 3000:3000
+    command: npm run start:dev
+  
+  db:
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=node_db
+      - POSTGRES_USER=hds
+      - POSTGRES_PASSWORD=12345
