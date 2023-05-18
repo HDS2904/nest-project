@@ -1,31 +1,23 @@
-import { University } from "src/university/entities/university.entity";
-import { Column, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user/entities/user.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'user' })
-export class User {
-
+@Entity({ name: 'university' })
+export class University {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
     type: "varchar",
-    length: 50,
+    length: 100,
     unique: true
   })
   name: string;
 
   @Column({
     type: "varchar",
-    length: 50,
     nullable: true
   })
-  profession: string;
-
-  @Column({
-    type:"integer",
-    nullable: true
-  })
-  age: number;
+  description: string;
 
   @Column({
     type: "boolean",
@@ -46,6 +38,6 @@ export class User {
   })
   updateAt: Date;
 
-  @ManyToOne( () => University, university => university.users )
-  university: University;
+  @OneToMany( () => User, user => user.university )
+  users: User[]
 }

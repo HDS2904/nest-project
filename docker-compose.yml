@@ -5,10 +5,10 @@ services:
     build: .
     environment:
       - PROJECT_NAME=nest-project
-      - POSTGRES_DB=node_db
-      - POSTGRES_USER=hds
-      - POSTGRES_PASSWORD=12345
-      - POSTGRES_HOST=db
+      - MYSQL_DATABASE=nest_db
+      - MYSQL_USER=hds
+      - MYSQL_PASSWORD=12345
+      - MYSQL_HOST=db
     volumes:
       - .:/usr/nest-project
       - /usr/nest-project/node_modules
@@ -17,10 +17,11 @@ services:
     command: npm run start:dev
   
   db:
-    image: postgres:12
+    image: mysql:8.0
     ports:
-      - "5432:5432"
+      - "3306:3306"
     environment:
-      - POSTGRES_DB=node_db
-      - POSTGRES_USER=hds
-      - POSTGRES_PASSWORD=12345
+      - MYSQL_DATABASE=nest_db
+      - MYSQL_USER=hds
+      - MYSQL_PASSWORD=12345
+      - MYSQL_ROOT_PASSWORD=12345

@@ -14,4 +14,6 @@ RUN npm install
 
 COPY [".", "/usr/nest-project/"]
 
+RUN git config --global --add safe.directory /usr/nest-project
+
 EXPOSE 3000
