@@ -1,0 +1,129 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  """Identificador del usuario."""
+  id: ID!
+
+  """Nombre de Usuario."""
+  name: String!
+
+  """Profesion del usuario."""
+  profession: String!
+
+  """Edad del usuario."""
+  age: Float!
+
+  """Estado del usuario."""
+  status: Boolean!
+
+  """Fecha de creación."""
+  createdAt: DateTime!
+
+  """Fecha de edición."""
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type University {
+  """Index University."""
+  id: ID!
+
+  """name University."""
+  name: String!
+
+  """description University."""
+  description: String
+
+  """status University."""
+  status: Boolean
+
+  """status University."""
+  createdAt: DateTime!
+
+  """status University."""
+  updatedAt: DateTime!
+}
+
+type Query {
+  """Devuelve una lista de usuarios."""
+  Users: [User!]!
+
+  """Retorna un usuario según el id consultado."""
+  UserById(id: ID!): User
+
+  """Devuelve una lista de universidades."""
+  Universities: [University!]!
+
+  """Retorna una universidad según el id consultado."""
+  UniversityById(id: ID!): University
+}
+
+type Mutation {
+  """permite la creación de un usuario."""
+  CreateUser(createUserInput: CreateUserInput!): User!
+
+  """Permite la mutación de usuario por id"""
+  UpdateUser(id: ID!, updateUserInput: UpdateUserInput!): User!
+
+  """Permite eliminar un usuario por id."""
+  removeUser(id: ID!): User
+
+  """permite la creación de una universidad."""
+  CreateUniversity(createUniversityInput: CreateUniversityInput!): University!
+
+  """Permite la mutación de univerdidad por id"""
+  UpdateUniversity(id: ID!, updateUniversityInput: UpdateUniversityInput!): University!
+
+  """Permite eliminar una universidad por id."""
+  removeUniversity(id: ID!): University
+}
+
+input CreateUserInput {
+  """input nombre del usuario."""
+  name: String!
+
+  """input profesión del usuario"""
+  profession: String!
+
+  """input edad del usuario."""
+  age: Float!
+}
+
+input UpdateUserInput {
+  """input nombre del usuario."""
+  name: String
+
+  """input profesión del usuario"""
+  profession: String
+
+  """input edad del usuario."""
+  age: Float
+
+  """input estado del usuario."""
+  status: Boolean!
+}
+
+input CreateUniversityInput {
+  """input Name university"""
+  name: String!
+
+  """input description university"""
+  description: String
+}
+
+input UpdateUniversityInput {
+  """input Name university"""
+  name: String
+
+  """input description university"""
+  description: String
+
+  """input status university"""
+  status: Boolean!
+}

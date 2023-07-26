@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { User } from "./entities/user.entity";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { CreateUserInput } from "./dto/create-user.input";
+import { UpdateUserInput } from "./dto/update-user.input";
 
 @Injectable()
 export class UserService {
@@ -12,44 +12,60 @@ export class UserService {
       name: "jonathan",
       profession: 'developer',
       age: 30,
-      status: true
+      status: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
       id: '2',
       name: "emilia",
       profession: 'doctor',
       age: 28,
-      status: true
+      status: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
-  ] 
+  ]
 
-  getAll() {
+  findAll() {
     return this.users;
   }
 
-  getById(id: string) {
-    const user = this.users.find(user => user.id === id);
-    if (!user) return { message: 'Usuario no encontrado.' }
-    return { message: 'Usuario encontrado.', data: user };
+  findOne(id: string) {
+    const index = this.users.findIndex(u => u.id === id);
+    if (index === -1) return null;
+    return this.users[index];
   }
 
-  postEntity(user: CreateUserDto) {
+  create(createUserInput: CreateUserInput) {
     const id = `${Math.max(...this.users.map( i => parseInt(i.id)), 0) + 1}`;
-    this.users.push({...user, id, status: true})
-    return { message: 'Usuario creado.'};
+    const newUser = {
+      ...createUserInput,
+      id,
+      status: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.users.push(newUser);
+    return newUser;
   }
 
-  putById(id: string, userDto: UpdateUserDto) {
+  update(id: string, updateUserInput: UpdateUserInput) {
     const index = this.users.findIndex( u => u.id === id);
-    if (index === -1) return { message: 'Usuario no encontrado.' }
-    this.users.splice( index, 1, { ...this.users[index], ...userDto}  );
-    return { message: 'Usuario editado.' };
+    if (index === -1) return null;
+    const userEdit = {
+      ...this.users[index],
+      ...updateUserInput,
+      updateAt: new Date()
+    };
+    this.users.splice(index, 1, userEdit);
+    return userEdit;
   }
 
-  deleteById(id: string) {
+  remove(id: string) {
     const index = this.users.findIndex( u => u.id === id);
-    if (index === -1) return { message: 'Usuario no encontrado.' }
-    this.users.splice(index,1);
-    return { message: 'Usuario eliminado.' };
+    if (index === -1) return null;
+    const user = this.users.splice(index, 1);
+    return user[0];
   }
 }
