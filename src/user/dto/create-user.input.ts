@@ -8,15 +8,19 @@ export class CreateUserInput {
   @MaxLength(50)
   name: string;
 
-  @Field({ description: 'input profesión del usuario' })
+  @Field({ nullable: true, description: 'input profesión del usuario' })
   @IsString()
   @MaxLength(50)
   @IsOptional()
-  profession: string;
+  profession?: string;
 
-  @Field({ description: 'input edad del usuario.' })
+  @Field({ nullable: true, description: 'input edad del usuario.' })
   @IsInt()
   @IsPositive()
   @IsOptional()
-  age: number;
+  age?: number;
+
+  @Field({ description: 'input id de la universidad asociada.' })
+  @IsString()
+  universityId: string;
 }

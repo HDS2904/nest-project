@@ -1,71 +1,72 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { User } from "./entities/user.entity";
 import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
+import { Repository } from "sequelize-typescript";
+import { v4 as uuid } from "uuid";
 
 @Injectable()
 export class UserService {
 
-  users: User[] = [
-    {
-      id: '1',
-      name: "jonathan",
-      profession: 'developer',
-      age: 30,
-      status: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: '2',
-      name: "emilia",
-      profession: 'doctor',
-      age: 28,
-      status: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-  ]
+  constructor(
+    @Inject('USER_REPOSITORY') private userRepository: Repository<User>
+  ) { }
 
-  findAll() {
-    return this.users;
+  async findAll() {
+    const result = await this.userRepository.findAll();
+    console.log('getAll: ', result)
+    return result;
   }
 
-  findOne(id: string) {
-    const index = this.users.findIndex(u => u.id === id);
-    if (index === -1) return null;
-    return this.users[index];
+  async findOne(id: string) {
+    const result = await this.userRepository.findByPk(id);
+    if (!result) return null;
+    console.log('findAll: ', result)
+    return result;
   }
 
-  create(createUserInput: CreateUserInput) {
-    const id = `${Math.max(...this.users.map( i => parseInt(i.id)), 0) + 1}`;
+  async create(createUserInput: CreateUserInput) {
     const newUser = {
       ...createUserInput,
-      id,
+      id: uuid(),
       status: true,
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    this.users.push(newUser);
-    return newUser;
+    const result = await this.userRepository.create(newUser);
+    console.log('createee: ', result)
+    return result;
   }
 
-  update(id: string, updateUserInput: UpdateUserInput) {
-    const index = this.users.findIndex( u => u.id === id);
-    if (index === -1) return null;
+  async update(id: string, updateUserInput: UpdateUserInput) {
     const userEdit = {
-      ...this.users[index],
       ...updateUserInput,
       updateAt: new Date()
     };
-    this.users.splice(index, 1, userEdit);
-    return userEdit;
+    const result1 = await this.userRepository.update(userEdit,{
+      where: {
+        id: id
+      }
+    });
+    if (!result1 || !result1[0]) return null;
+    console.log('updateee: ', result1);
+    const result2 = await this.userRepository.findByPk(id);
+    if (!result2) return null;
+    console.log('findOne: ', result2);
+    return result2;
   }
 
-  remove(id: string) {
-    const index = this.users.findIndex( u => u.id === id);
-    if (index === -1) return null;
-    const user = this.users.splice(index, 1);
-    return user[0];
+  async remove(id: string) {
+    const result1 = await this.userRepository.findByPk(id);
+    if (!result1) return null;
+    console.log('findOne: ', result1);
+    const result2 = await this.userRepository.destroy({
+      where: {
+        id
+      }
+    });
+    console.log('deleteee: ', result2);
+    if (!result2) return null;
+    return result1;
   }
 }

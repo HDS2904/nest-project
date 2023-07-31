@@ -4,8 +4,8 @@ import { CreateUserInput } from './create-user.input';
 
 @InputType()
 export class UpdateUserInput extends PartialType(CreateUserInput){
-  @Field({ description: 'input estado del usuario.' })
-  @IsBoolean()
+  @Field({ nullable: true, description: 'input estado del usuario.' })
   @IsOptional()
-  status: boolean;
+  @IsBoolean()
+  status?: boolean;
 }

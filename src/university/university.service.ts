@@ -1,61 +1,73 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { University } from './entities/university.entity';
 import { CreateUniversityInput } from './dto/create-university.input';
 import { UpdateUniversityInput } from './dto/update-university.input';
+import { Repository } from 'sequelize-typescript';
+import { v4 as uuid } from "uuid";
 
 @Injectable()
 export class UniversityService {
 
-  university: University[] = [
-    {
-      id: '1231',
-      name: 'UNMSM',
-      description: 'decana de america.',
-      status: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
-  ]
+  constructor(
+    @Inject('UNIVERSITY_REPOSITORY') private universityRepository: Repository<University>
+  ) {}
 
-  findAll() {
-    return this.university;
+  async findAll() {
+    const result = await this.universityRepository.findAll();
+    if (!result) return null;
+    console.log('findAll: ', result);
+    return result;
   }
 
-  findOne(id: string) {
-    const index = this.university.findIndex(u => u.id === id);
-    if ( index === -1 ) return null
-    return this.university[index];
+  async findOne(id: string) {
+    const result = await this.universityRepository.findByPk(id);
+    if (!result) return null;
+    console.log('findOne: ', result);
+    return result;
   }
 
-  create(createUniversityInput: CreateUniversityInput) {
-    const id = `${Math.max(...this.university.map( i => parseInt(i.id)), 0) + 1}`;
+  async create(createUniversityInput: CreateUniversityInput) {
     const newUniversity = {
       ...createUniversityInput,
-      id,
+      id: uuid(),
       status: true,
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    this.university.push(newUniversity);
-    return newUniversity;
+    const result = await this.universityRepository.create(newUniversity);
+    console.log('createee: ', result)
+    return result;
   }
 
-  update(id: string, updateUniversityInput: UpdateUniversityInput) {
-    const index = this.university.findIndex(u => u.id === id);
-    if ( index === -1 ) return null
+  async update(id: string, updateUniversityInput: UpdateUniversityInput) {
     const universityEdit = {
-      ...this.university[index],
       ...updateUniversityInput,
       updateAt: new Date()
     };
-    this.university.splice(index, 1, universityEdit);
-    return universityEdit;
+    const result1 = await this.universityRepository.update(universityEdit,{
+      where: {
+        id: id
+      }
+    });
+    if (!result1 || !result1[0]) return null;
+    console.log('updateee: ', result1);
+    const result2 = await this.universityRepository.findByPk(id);
+    if (!result2) return null;
+    console.log('findOne: ', result2);
+    return result2;
   }
 
-  remove(id: string) {
-    const index = this.university.findIndex(u => u.id === id);
-    if ( index === -1 ) return null
-    const university = this.university.splice(index, 1);
-    return university[0];
+  async remove(id: string) {
+    const result1 = await this.universityRepository.findByPk(id);
+    if (!result1) return null;
+    console.log('findOne: ', result1);
+    const result2 = await this.universityRepository.destroy({
+      where: {
+        id
+      }
+    });
+    console.log('deleteee: ', result2);
+    if (!result2) return null;
+    return result1;
   }
 }

@@ -1,22 +1,35 @@
-import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Column, HasMany, Model, PrimaryKey, Table } from 'sequelize-typescript';
+import { User } from 'src/user/entities/user.entity';
 
 @ObjectType()
-export class University {
-  @Field(() => ID,{ description: 'Index University.' })
+@Table
+export class University extends Model {
+  @Field(() => ID, { description: 'Identificador de la universidad.' })
+  @PrimaryKey
+  @Column
   id: string;
 
-  @Field({ description: 'name University.' })
+  @Field({ description: 'Nombre de la universidad.' })
+  @Column
   name: string;
 
-  @Field({ nullable: true, description: 'description University.' })
+  @Field({ nullable: true, description: 'Descripcion de la universidad.' })
+  @Column
   description: string;
 
-  @Field({ nullable: true, description: 'status University.' })
+  @Field({ description: 'Estado de la universidad.' })
+  @Column
   status: boolean;
 
-  @Field({ description: 'status University.' })
+  @Field({ description: 'Fecha de creacion de la universidad.' })
+  @Column
   createdAt: Date;
 
-  @Field({ description: 'status University.' })
+  @Field({ description: 'Fecha de edicion de la universidad.' })
+  @Column
   updatedAt: Date;
+
+  @HasMany(()=> User)
+  users: User[]
 }

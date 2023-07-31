@@ -9,6 +9,7 @@ import {
 
 import { UserModule } from './user/user.module';
 import { UniversityModule } from './university/university.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { UniversityModule } from './university/university.module';
       ],
     }),
     UserModule,
-    UniversityModule
+    UniversityModule,
+    DatabaseModule
   ],
   controllers: [],
   providers: [],

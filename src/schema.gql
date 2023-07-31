@@ -2,26 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  """Identificador del usuario."""
+type University {
+  """Identificador de la universidad."""
   id: ID!
 
-  """Nombre de Usuario."""
+  """Nombre de la universidad."""
   name: String!
 
-  """Profesion del usuario."""
-  profession: String!
+  """Descripcion de la universidad."""
+  description: String
 
-  """Edad del usuario."""
-  age: Float!
-
-  """Estado del usuario."""
+  """Estado de la universidad."""
   status: Boolean!
 
-  """Fecha de creación."""
+  """Fecha de creacion de la universidad."""
   createdAt: DateTime!
 
-  """Fecha de edición."""
+  """Fecha de edicion de la universidad."""
   updatedAt: DateTime!
 }
 
@@ -30,23 +27,29 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type University {
-  """Index University."""
+type User {
+  """Identificador del usuario."""
   id: ID!
 
-  """name University."""
+  """Nombre de Usuario."""
   name: String!
 
-  """description University."""
-  description: String
+  """Profesion del usuario."""
+  profession: String
 
-  """status University."""
-  status: Boolean
+  """Edad del usuario."""
+  age: Float
 
-  """status University."""
+  """Id de la universidad asociada."""
+  universityId: String!
+
+  """Estado del usuario."""
+  status: Boolean!
+
+  """Fecha de creación."""
   createdAt: DateTime!
 
-  """status University."""
+  """Fecha de edición."""
   updatedAt: DateTime!
 }
 
@@ -89,10 +92,13 @@ input CreateUserInput {
   name: String!
 
   """input profesión del usuario"""
-  profession: String!
+  profession: String
 
   """input edad del usuario."""
-  age: Float!
+  age: Float
+
+  """input id de la universidad asociada."""
+  universityId: String!
 }
 
 input UpdateUserInput {
@@ -105,25 +111,28 @@ input UpdateUserInput {
   """input edad del usuario."""
   age: Float
 
+  """input id de la universidad asociada."""
+  universityId: String
+
   """input estado del usuario."""
-  status: Boolean!
+  status: Boolean
 }
 
 input CreateUniversityInput {
-  """input Name university"""
+  """input nombre de la universidad"""
   name: String!
 
-  """input description university"""
+  """input descriciond e la universidad"""
   description: String
 }
 
 input UpdateUniversityInput {
-  """input Name university"""
+  """input nombre de la universidad"""
   name: String
 
-  """input description university"""
+  """input descriciond e la universidad"""
   description: String
 
-  """input status university"""
-  status: Boolean!
+  """input estado de universidad"""
+  status: Boolean
 }
